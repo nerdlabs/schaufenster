@@ -19,5 +19,5 @@ test('when no patterns are found in given directory', async t => {
 		}
 	});
 	const actual = await findPatterns('./components');
-	t.deepEqual(actual, [], 'it should return an empty array');
+	t.same(actual, [], 'it should return an empty array');
 });
