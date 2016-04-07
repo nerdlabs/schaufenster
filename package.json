@@ -49,5 +49,8 @@
     "babel-preset-stage-0": "6.5.0",
     "babel-register": "6.7.2",
     "mock-fs": "3.8.0"
+  },
+  "dependencies": {
+    "denodeify": "1.2.1"
   }
 }
