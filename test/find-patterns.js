@@ -28,11 +28,7 @@ test('when no patterns are found in given directory', async t => {
 });
 
 test('when calling find-patterns with a file path', t => {
-	mockFs({
-		components: {
-			'unrelated.js': 'blah'
-		}
-	});
+	mockFs(mocks.unrelated);
 	const actual = findPatterns('./components/unrelated.js');
 	t.throws(actual, RangeError, 'it should throw a RangeError');
 	mockFs.restore();

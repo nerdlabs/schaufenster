@@ -1,11 +1,11 @@
-import {stat} from 'fs';
+import {stat as fsStat} from 'fs';
 import denodeify from 'denodeify';
 
-const fsStat = denodeify(stat);
+const stat = denodeify(fsStat);
 
-async function tryStat(searchPath) {
+async function tryStat(path) {
 	try {
-		return await fsStat(searchPath);
+		return await stat(path);
 	} catch (error) {
 		return null;
 	}
