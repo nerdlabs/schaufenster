@@ -12,7 +12,7 @@ const mocks = {
 
 test('when calling find-patterns with no arguments', t => {
 	const actual = findPatterns();
-	t.throws(actual, TypeError, 'it should throw a TypeError');
+	t.throws(actual, Error, 'it should throw a Error');
 });
 
 test('when calling find-patterns with a non-existing path', t => {

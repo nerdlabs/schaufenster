@@ -1,5 +1,6 @@
 import {stat as fsStat} from 'fs';
 import denodeify from 'denodeify';
+import invariant from 'invariant';
 
 const stat = denodeify(fsStat);
 
@@ -12,18 +13,19 @@ async function tryStat(path) {
 }
 
 export default async (searchPath) => {
-	if (typeof searchPath !== 'string') {
-		throw new TypeError(
-			'First argument searchPath must be of type string, received',
-			typeof searchPath
+	invariant(
+		typeof searchPath === 'string',
+		'First argument must be of type string. Instead got "%s"',
+		typeof searchPath
+	);
+
+	const stats = await tryStat(searchPath);
+
+	if (stats === null || !stats.isDirectory()) {
+		throw new RangeError(
+			`Path "${searchPath}" does not exist or is not a directory`
 		);
 	}
 
-	const pathStat = await tryStat(searchPath);
-	
-	if (!pathStat) {
-		throw new RangeError(`File or directory '${searchPath} not found`);
-	} else {
-		return [];
-	}
+	return [];
 }

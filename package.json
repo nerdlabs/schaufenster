@@ -51,6 +51,7 @@
     "mock-fs": "3.8.0"
   },
   "dependencies": {
-    "denodeify": "1.2.1"
+    "denodeify": "1.2.1",
+    "invariant": "2.2.1"
   }
 }
