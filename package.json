@@ -52,6 +52,7 @@
   },
   "dependencies": {
     "denodeify": "1.2.1",
+    "glob": "7.0.3",
     "invariant": "2.2.1"
   }
 }

@@ -1,14 +1,25 @@
 import {stat as fsStat} from 'fs';
+import {dirname} from 'path';
 import denodeify from 'denodeify';
 import invariant from 'invariant';
+import nodeGlob from 'glob';
 
 const stat = denodeify(fsStat);
+const glob = denodeify(nodeGlob);
 
 async function tryStat(path) {
 	try {
 		return await stat(path);
 	} catch (error) {
 		return null;
+	}
+}
+
+async function tryGlob(pattern) {
+	try {
+		return await glob(pattern);
+	} catch (error) {
+		return [];
 	}
 }
 
@@ -27,5 +38,10 @@ export default async (searchPath) => {
 		);
 	}
 
-	return [];
+	const patterns = await tryGlob(`${searchPath}/**/package.json`);
+	return patterns.map(pattern => {
+		return {
+			entry: dirname(pattern)
+		};
+	});
 }
