@@ -1,3 +1,7 @@
 export default async (patterns) => {
-	throw new Error('No arguments provided');
+	if (typeof patterns === 'undefined') {
+		throw new Error('No arguments provided');
+	} else {
+		return [];
+	}
 };
