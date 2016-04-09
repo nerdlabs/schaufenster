@@ -3,15 +3,15 @@ import mockFs from 'mock-fs';
 import findPatterns from '../source/find-patterns';
 
 const mocks = {
-	unrelated: {
-		'components/unrelated.js': 'blah'
-		}
+	'unrelated/components/unrelated.js': 'blah',
+	'single/components/atoms/text': {
+		'package.json': '{"name":"text","version":"0.1.0","main":"index.js"}',
+		'index.js': 'export default const foo = true;'
 	}
 };
 
-test.after(() => {
-	mockFs.restore();
-});
+test.beforeEach(() => mockFs(mocks));
+test.afterEach(mockFs.restore);
 
 test('when calling find-patterns with no arguments', t => {
 	const actual = findPatterns();
@@ -24,13 +24,19 @@ test('when calling find-patterns with a non-existing path', t => {
 });
 
 test('when no patterns are found in given directory', async t => {
-	mockFs(mocks.unrelated);
-	const actual = await findPatterns('./components');
+	const actual = await findPatterns('./unrelated/components');
+	console.log(actual);
 	t.same(actual, [], 'it should return an empty array');
 });
 
 test('when calling find-patterns with a file path', t => {
-	mockFs(mocks.unrelated);
-	const actual = findPatterns('./components/unrelated.js');
+	const actual = findPatterns('./unrelated/components/unrelated.js');
 	t.throws(actual, RangeError, 'it should throw a RangeError');
+});
+
+test('when calling with a valid patterns directory', async t => {
+	const actual = await findPatterns('./single/components');
+	const expected = [{entry: './single/components/atoms/text'}];
+	const it = `it should return an array of objects with entry files`;
+	t.same(actual, expected, it);
 });
