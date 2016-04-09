@@ -41,7 +41,7 @@ export default async (searchPath) => {
 	const patterns = await tryGlob(`${searchPath}/**/package.json`);
 	return patterns.map(pattern => {
 		return {
-			entry: dirname(pattern)
+			path: dirname(pattern)
 		};
 	});
 }

@@ -25,7 +25,6 @@ test('when calling find-patterns with a non-existing path', t => {
 
 test('when no patterns are found in given directory', async t => {
 	const actual = await findPatterns('./unrelated/components');
-	console.log(actual);
 	t.same(actual, [], 'it should return an empty array');
 });
 
@@ -36,7 +35,9 @@ test('when calling find-patterns with a file path', t => {
 
 test('when calling with a valid patterns directory', async t => {
 	const actual = await findPatterns('./single/components');
-	const expected = [{entry: './single/components/atoms/text'}];
-	const it = `it should return an array of objects with entry files`;
+	const expected = [{path: './single/components/atoms/text'}];
+	const it = `
+		it should return an array of objects with 'path' pointing to pattern directory
+	`;
 	t.same(actual, expected, it);
 });
