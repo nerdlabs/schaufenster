@@ -50,7 +50,8 @@
     "babel-preset-es2015-node5": "1.2.0",
     "babel-preset-stage-0": "6.5.0",
     "babel-register": "6.7.2",
-    "mock-fs": "3.8.0"
+    "mock-fs": "3.8.0",
+    "unindent": "2.0.0"
   },
   "dependencies": {
     "denodeify": "1.2.1",
