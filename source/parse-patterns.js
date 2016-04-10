@@ -1,6 +1,7 @@
 import invariant from 'invariant';
 import * as babylon from 'babylon';
 import astDependencies from 'babylon-ast-dependencies';
+import * as docGen from 'react-docgen';
 
 const babylonOptions = {
 	sourceType: 'module',
@@ -34,7 +35,8 @@ export default async (patterns) => {
 
 		return {
 			...pattern,
-			dependencies: dependencies.map(dependency => dependency.source)
+			dependencies: dependencies.map(dependency => dependency.source),
+			propTypes: docGen.parse(pattern.entry)
 		};
 	});
 };

@@ -59,6 +59,7 @@
     "denodeify": "1.2.1",
     "glob": "7.0.3",
     "invariant": "2.2.1",
-    "lodash": "4.8.2"
+    "lodash": "4.8.2",
+    "react-docgen": "2.8.2"
   }
 }
