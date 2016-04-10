@@ -19,10 +19,7 @@ test('find dependencies', async t => {
 			return (<button><Text /></button>);
 		};
 	`);
-	const actual = await parsePatters([{entry}]);
-	const expected = [{
-		entry,
-		dependencies: ['../text']
-	}];
+	const [{dependencies: actual}] = await parsePatters([{entry}]);
+	const expected = ['../text'];
 	t.same(actual, expected, 'it should parse entry file and find file dependencies');
 });

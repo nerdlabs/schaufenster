@@ -1,4 +1,25 @@
 import invariant from 'invariant';
+import * as babylon from 'babylon';
+import astDependencies from 'babylon-ast-dependencies';
+
+const babylonOptions = {
+	sourceType: 'module',
+	plugins: [
+		'jsx',
+		'asyncFunctions',
+		'classConstructorCall',
+		'doExpressions',
+		'trailingFunctionCommas',
+		'objectRestSpread',
+		'decorators',
+		'classProperties',
+		'exportExtensions',
+		'exponentiationOperator',
+		'asyncGenerators',
+		'functionBind',
+		'functionSent'
+	]
+};
 
 export default async (patterns) => {
 	invariant(
@@ -7,5 +28,13 @@ export default async (patterns) => {
 		typeof patterns
 	);
 
-	return [];
+	return patterns.map(pattern => {
+		const ast = babylon.parse(pattern.entry, babylonOptions);
+		const dependencies = astDependencies(ast);
+
+		return {
+			...pattern,
+			dependencies: dependencies.map(dependency => dependency.source)
+		};
+	});
 };

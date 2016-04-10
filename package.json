@@ -54,6 +54,8 @@
     "unindent": "2.0.0"
   },
   "dependencies": {
+    "babylon": "6.7.0",
+    "babylon-ast-dependencies": "1.0.2",
     "denodeify": "1.2.1",
     "glob": "7.0.3",
     "invariant": "2.2.1",
