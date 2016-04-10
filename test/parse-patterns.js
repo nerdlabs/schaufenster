@@ -23,3 +23,20 @@ test('find dependencies', async t => {
 	const expected = ['../text'];
 	t.same(actual, expected, 'it should parse entry file and find file dependencies');
 });
+
+test('try to parse propTypes with react-docgen', async t => {
+	const entry = unindent(`
+		import * as React from 'react';
+		export default function Button({text}) {
+			return (<button>{text}</button>);
+		};
+		Button.propTypes = {
+			/**
+			 * Description of prop "text" which is required
+			 */
+			text: React.PropTypes.string.isRequired
+		};
+	`);
+	const [{propTypes: actual}] = await parsePatters([{entry}]);
+	t.ok(typeof actual === 'object', 'it should parse propTypes and run react-docgen');
+});
