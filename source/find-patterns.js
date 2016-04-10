@@ -19,6 +19,8 @@ export default async (searchPath) => {
 
 	const absolutePath = resolve(searchPath);
 
+	// TODO: maybe use {package.json,index.js,readme.md} as glob default
+	// TODO: make glob configurable
 	const patterns = await tryGlob(`${searchPath}/**/package.json`);
 
 	return patterns.map(pattern => {

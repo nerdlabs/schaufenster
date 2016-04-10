@@ -53,8 +53,13 @@ export default async (patterns) => {
 			);
 		}
 
+		// TODO: instead of parsing the package.json file and looking for main/index
+		// consider using require.resolve to make it behave exactly like node.
+		// caveat: can't mock fs for require.resolve!
 		const index = files.find(isIndex);
 		const entryFile = await readFileInDir(pattern.path, main || index);
+		// TODO: don't fail if no entry file was found because some patterns might
+		// only have a readme.md file.
 		if (!entryFile) {
 			throw new Error(
 				`Could not find an entry file for ${pattern.id} in ${pattern.path}`
