@@ -24,7 +24,6 @@ test(`when calling with valid pattern folders`, async t => {
 		path: './components/button',
 		files: ['button.js', 'package.json']
 	}];
-	console.log(actual, expected);
 	t.same(actual, expected, 'it should read the directory contents');
 	mockFs.restore();
 });
