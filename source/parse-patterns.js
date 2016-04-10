@@ -6,4 +6,6 @@ export default async (patterns) => {
 		'Argument must be of type Array. Instead got "%s"',
 		typeof patterns
 	);
+
+	return [];
 };
