@@ -25,22 +25,40 @@ Umsetzung
 * Readme: wenn im pattern folder readme.md, anzeigen/rendern
 
 # Architektur
-----------
-| 1 core | ---- fs comprehension, js parsing, markdown parsing (jsx demo)
-----------
-     |
----------------
-| ui-renderer |  ---- rendering navigation, documentation, dependency tree, demos
----------------  ---- erzeugt browser-kompatiblen output
-	- benutzt zentrale build-bundles vom fs (muss konfiguriert werden)
-	- schreibt zentrale entry-file auf fs (hängt exports in global)
-	- user provided html-grundgerüst
-	- user konfiguriert publicRoot (fs-path)
-	- user konfiguriert bundlePaths, werden eingebunden
-	- patterns werden über eindeutige id referenziert
+----------  
+| 1 core | ---- fs comprehension, js parsing, markdown parsing (jsx demo)  
+----------  
+     |  
+---------------  
+| ui-renderer |  ---- rendering navigation, documentation, dependency tree, demos  
+---------------  ---- erzeugt browser-kompatiblen output  
+	- benutzt zentrale build-bundles vom fs (muss konfiguriert werden)  
+	- schreibt zentrale entry-file auf fs (hängt exports in global)  
+	- user provided html-grundgerüst  
+	- user konfiguriert publicRoot (fs-path)  
+	- user konfiguriert bundlePaths, werden eingebunden  
+	- patterns werden über eindeutige id referenziert  
 
 
 # Application life cycle
 - configuration lesen
 - patterns finden
 - patterns parsen
+
+#Roadmap / ToDos (in no particular order)
+* [] Use substack/node-resolve in `read-patterns` to find entry-files
+* [] Build `Core` which uses `find-patterns` and `read-patterns` to generate initial  
+[pattern tree](tree.md).
+* [] parse JavaScript and CSS files to find dependencies between patterns
+* [] Use `addDependency` and `removeDependency` to add edges between the pattern nodes.
+* [] Implement parsing of JS, CSS and Markdown as replaceable plugins / transforms.
+* [] Use chokidar to recursively watch pattern root folder and recursively  
+update patterns / dependencies when files change.
+* [] Use `react-docgen` to create `propTypes` documentation
+* [] Use `react-markdown` to extract JSX code blocks from readme.md files and  
+use them as demo to render a pattern.
+* [] Generate "entry-file" by creating a JS file which "exports" all patterns  
+as top-level objects.
+* [] Build basic UI which displays navigation, name, path, props, readme and  
+dependencies for each pattern.
+* [] Extend the UI to also being able to render the requested pattern as a demo.
