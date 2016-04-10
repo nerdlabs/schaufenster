@@ -46,19 +46,19 @@ Umsetzung
 - patterns parsen
 
 #Roadmap / ToDos (in no particular order)
-* [] Use substack/node-resolve in `read-patterns` to find entry-files
-* [] Build `Core` which uses `find-patterns` and `read-patterns` to generate initial  
+* [ ] Use substack/node-resolve in `read-patterns` to find entry-files
+* [ ] Build `Core` which uses `find-patterns` and `read-patterns` to generate initial  
 [pattern tree](tree.md).
-* [] parse JavaScript and CSS files to find dependencies between patterns
-* [] Use `addDependency` and `removeDependency` to add edges between the pattern nodes.
-* [] Implement parsing of JS, CSS and Markdown as replaceable plugins / transforms.
-* [] Use chokidar to recursively watch pattern root folder and recursively  
+* [ ] parse JavaScript and CSS files to find dependencies between patterns
+* [ ] Use `addDependency` and `removeDependency` to add edges between the pattern nodes.
+* [ ] Implement parsing of JS, CSS and Markdown as replaceable plugins / transforms.
+* [ ] Use chokidar to recursively watch pattern root folder and recursively  
 update patterns / dependencies when files change.
-* [] Use `react-docgen` to create `propTypes` documentation
-* [] Use `react-markdown` to extract JSX code blocks from readme.md files and  
+* [ ] Use `react-docgen` to create `propTypes` documentation
+* [ ] Use `react-markdown` to extract JSX code blocks from readme.md files and  
 use them as demo to render a pattern.
-* [] Generate "entry-file" by creating a JS file which "exports" all patterns  
+* [ ] Generate "entry-file" by creating a JS file which "exports" all patterns  
 as top-level objects.
-* [] Build basic UI which displays navigation, name, path, props, readme and  
+* [ ] Build basic UI which displays navigation, name, path, props, readme and  
 dependencies for each pattern.
-* [] Extend the UI to also being able to render the requested pattern as a demo.
+* [ ] Extend the UI to also being able to render the requested pattern as a demo.
