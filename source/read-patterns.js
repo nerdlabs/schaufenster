@@ -1,16 +1,5 @@
-import {readdir as readdirFs} from 'fs';
-import denodeify from 'denodeify';
+import {tryReaddir} from './lib/fs';
 import {zipWith} from 'lodash';
-
-const readdir = denodeify(readdirFs);
-
-const tryReaddir = async path => {
-	try {
-		return await readdir(path);
-	} catch (error) {
-		return null;
-	}
-};
 
 export default async (patterns) => {
 	if (typeof patterns === 'undefined') {
