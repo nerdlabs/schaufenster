@@ -35,9 +35,12 @@ test('when calling find-patterns with a file path', t => {
 
 test('when calling with a valid patterns directory', async t => {
 	const actual = await findPatterns('./single/components');
-	const expected = [{path: './single/components/atoms/text'}];
+	const expected = [{
+		id: 'atoms/text',
+		path: './single/components/atoms/text'
+	}];
 	const it = `
-		it should return an array of objects with 'path' pointing to pattern directory
+		it should return an object for each pattern consisting of "id" and "path"
 	`;
 	t.same(actual, expected, it);
 });

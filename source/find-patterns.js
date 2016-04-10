@@ -1,4 +1,4 @@
-import {dirname} from 'path';
+import {dirname, resolve} from 'path';
 import {tryStat, tryGlob} from './lib/fs';
 import invariant from 'invariant';
 
@@ -17,10 +17,15 @@ export default async (searchPath) => {
 		);
 	}
 
+	const absolutePath = resolve(searchPath);
+
 	const patterns = await tryGlob(`${searchPath}/**/package.json`);
+
 	return patterns.map(pattern => {
-		return {
-			path: dirname(pattern)
-		};
+		const path = dirname(pattern);
+		// resolve removes the trailing slash
+		// so we use path.length + 1 to account for it
+		const id = resolve(path).slice(absolutePath.length + 1);
+		return {path, id};
 	});
 }
