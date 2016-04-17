@@ -33,12 +33,6 @@ test('when calling with an empty array', async t => {
 	t.same(actual, [], 'it should return an empty array');
 });
 
-test(`when calling with invalid package.json`, t => {
-	const actual = readPatterns([{path: './jsonerr/components/button'}]);
-	t.throws(actual, Error, 'it should throw an Error');
-	mockFs.restore();
-});
-
 test(`when package.json->main does not exist`, t => {
 	const actual = readPatterns([{path: './noentry/components/button'}]);
 	t.throws(actual, Error, 'it should throw an Error');
@@ -56,8 +50,8 @@ test(`when calling with valid pattern folders`, async t => {
 	const expected = [{
 		path: './valid/components/button',
 		files: ['button.js', 'index.js', 'package.json', 'readme.md'],
-		package: '{"name":"button","version":"0.1.0","main":"button.js"}',
-		entry: 'foo',
+		package: {name: 'button', version: '0.1.0', main: 'button.js'},
+		entry: 'button.js',
 		readme: 'blah'
 	}];
 	t.same(actual, expected, 'it should find readme, package.json and entry files');
