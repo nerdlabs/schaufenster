@@ -45,20 +45,28 @@ Umsetzung
 - patterns finden
 - patterns parsen
 
-#Roadmap / ToDos (in no particular order)
-* [ ] Use substack/node-resolve in `read-patterns` to find entry-files
-* [ ] Build `Core` which uses `find-patterns` and `read-patterns` to generate initial  
-[pattern tree](tree.md).
-* [ ] parse JavaScript and CSS files to find dependencies between patterns
-* [ ] Use `addDependency` and `removeDependency` to add edges between the pattern nodes.
-* [ ] Implement parsing of JS, CSS and Markdown as replaceable plugins / transforms.
-* [ ] Use chokidar to recursively watch pattern root folder and recursively  
-update patterns / dependencies when files change.
-* [ ] Use `react-docgen` to create `propTypes` documentation
-* [ ] Use `react-markdown` to extract JSX code blocks from readme.md files and  
-use them as demo to render a pattern.
-* [ ] Generate "entry-file" by creating a JS file which "exports" all patterns  
-as top-level objects.
-* [ ] Build basic UI which displays navigation, name, path, props, readme and  
-dependencies for each pattern.
-* [ ] Extend the UI to also being able to render the requested pattern as a demo.
+#Roadmap / ToDos
+* [x] Use substack/node-resolve in `read-patterns` to find entry-files
+* [x] Build up initial [pattern tree](tree.md)
+* [ ] Implement functions to read patterns from tree
+* [ ] Generate "entry-file" which exports/exposes all patterns
+* [ ] Build basic UI to display navigation, name, path and readme
+* [ ] Extend the UI to be able to render pattern demos
+
+
+* [ ] Implement functions to modify patterns in the pattern tree
+* [ ] Add chokidar to watch all pattern folders and update tree when patterns are added/removed
+
+
+* [ ] Parse JS files to find relative dependencies to other patterns
+* [ ] Implement functions to modify dependencies in the pattern tree
+* [ ] Use `addDependency` and `removeDependency` to update the pattern tree with dependencies
+* [ ] Use react-docgen to create propTypes documentation
+* [ ] Use react-markdown to extract JSX code blocks from readme file
+
+
+* [ ] Parse CSS files to find relative dependencies to other patterns
+* [ ] Investigate analyzing JS files to find default exports that return JSX
+    (to find patterns more reliably)
+* [ ] Investigate analyzing JSX `className` attributes to find CSS dependencies
+    (if no CSS modules are being used)
