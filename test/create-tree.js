@@ -20,17 +20,16 @@ const atomsInputsInput = {
 };
 
 test('when calling create-tree with no arguments', t => {
-	const actual = createTree();
-	t.throws(actual, Error, 'it should throw an Error');
+	t.throws(createTree, Error, 'it should throw an Error');
 });
 
-test('when calling create-tree with an empty array', async t => {
-	const actual = await createTree([]);
+test('when calling create-tree with an empty array', t => {
+	const actual = createTree([]);
 	t.same(actual.constructor.name, 'Map', 'it should return an empty Map');
 });
 
-test('when calling create-tree with an array of patterns', async t => {
-	const actual = await createTree([atomsButton, atomsInputsInput]);
+test('when calling create-tree with an array of patterns', t => {
+	const actual = createTree([atomsButton, atomsInputsInput]);
 	t.same(actual.get('atoms').get('button'), atomsButton,
 		'it should be able to keep old patterns');
 	t.same(actual.get('atoms').get('inputs').get('input'), atomsInputsInput,

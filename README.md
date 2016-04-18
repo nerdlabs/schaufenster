@@ -49,8 +49,8 @@ Umsetzung
 * [x] Use substack/node-resolve in `read-patterns` to find entry-files
 * [x] Build up initial [pattern tree](tree.md)
 * [ ] Implement functions to read patterns from tree
-* [ ] Generate "entry-file" which exports/exposes all patterns
 * [ ] Build basic UI to display navigation, name, path and readme
+* [ ] Generate "entry-file" which exports/exposes all patterns
 * [ ] Extend the UI to be able to render pattern demos
 
 

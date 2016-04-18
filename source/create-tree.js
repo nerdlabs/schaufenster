@@ -7,7 +7,7 @@ const getRecursive = (tree, [head, ...tail]) => {
 		getRecursive(tree.get(head), tail);
 };
 
-export default async patterns => {
+export default patterns => {
 	invariant(
 		Array.isArray(patterns),
 		'Argument must be of type Array. Instead got "%s"',
