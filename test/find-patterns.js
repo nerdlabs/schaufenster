@@ -25,7 +25,7 @@ test('when calling find-patterns with a non-existing path', t => {
 
 test('when no patterns are found in given directory', async t => {
 	const actual = await findPatterns('./unrelated/components');
-	t.same(actual, [], 'it should return an empty array');
+	t.deepEqual(actual, [], 'it should return an empty array');
 });
 
 test('when calling find-patterns with a file path', t => {
@@ -42,5 +42,5 @@ test('when calling with a valid patterns directory', async t => {
 	const it = `
 		it should return an object for each pattern consisting of "id" and "path"
 	`;
-	t.same(actual, expected, it);
+	t.deepEqual(actual, expected, it);
 });

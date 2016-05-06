@@ -25,13 +25,13 @@ test('when calling create-tree with no arguments', t => {
 
 test('when calling create-tree with an empty array', t => {
 	const actual = createTree([]);
-	t.same(actual.constructor.name, 'Map', 'it should return an empty Map');
+	t.deepEqual(actual.constructor.name, 'Map', 'it should return an empty Map');
 });
 
 test('when calling create-tree with an array of patterns', t => {
 	const actual = createTree([atomsButton, atomsInputsInput]);
-	t.same(actual.get('atoms').get('button'), atomsButton,
+	t.deepEqual(actual.get('atoms').get('button'), atomsButton,
 		'it should be able to keep old patterns');
-	t.same(actual.get('atoms').get('inputs').get('input'), atomsInputsInput,
+	t.deepEqual(actual.get('atoms').get('inputs').get('input'), atomsInputsInput,
 		'it should nest arbitrarily deep');
 });

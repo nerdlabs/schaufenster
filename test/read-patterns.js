@@ -30,7 +30,7 @@ test('when calling with no arguments', t => {
 
 test('when calling with an empty array', async t => {
 	const actual = await readPatterns([]);
-	t.same(actual, [], 'it should return an empty array');
+	t.deepEqual(actual, [], 'it should return an empty array');
 });
 
 test(`when package.json->main does not exist`, t => {
@@ -54,6 +54,6 @@ test(`when calling with valid pattern folders`, async t => {
 		entry: 'button.js',
 		readme: 'blah'
 	}];
-	t.same(actual, expected, 'it should find readme, package.json and entry files');
+	t.deepEqual(actual, expected, 'it should find readme, package.json and entry files');
 	mockFs.restore();
 });
