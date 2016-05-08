@@ -47,26 +47,27 @@ Umsetzung
 
 #Roadmap / ToDos
 * [x] Use substack/node-resolve in `read-patterns` to find entry-files
-* [x] Build up initial [pattern tree](tree.md)
-* [ ] Implement functions to read patterns from tree
-* [ ] Build basic UI to display navigation, name, path and readme
-* [ ] Generate "entry-file" which exports/exposes all patterns
-* [ ] Extend the UI to be able to render pattern demos
-
-
-* [ ] Implement functions to modify patterns in the pattern tree
-* [ ] Add chokidar to watch all pattern folders and update tree when patterns are added/removed
-
-
-* [ ] Parse JS files to find relative dependencies to other patterns
-* [ ] Implement functions to modify dependencies in the pattern tree
-* [ ] Use `addDependency` and `removeDependency` to update the pattern tree with dependencies
+* ~~[x] Build up initial [pattern tree](tree.md)~~ abandoned in favor of a flat array of components
+* ~~[ ] Implement functions to read patterns from tree~~
+* [x] Build basic UI to display navigation, name, path and readme
+* [X] Generate "entry-file" which exports/exposes all patterns
+* [x] Extend the UI to be able to render pattern demos *spiked in nerdlabs/schaufenster-ui#poc-rendering*
+* [ ] Code massage / clean up rename variables, make tests more robust, etc 
+* [ ] Improve create-entryfile.js (allow for es6 module syntax, commonjs, globals, etc)
+* [ ] Use react-markdown to extract JSX code blocks from readme file (used to render demo of pattern)
 * [ ] Use react-docgen to create propTypes documentation
-* [ ] Use react-markdown to extract JSX code blocks from readme file
-
-
+* [ ] Revisit pattern format (in anticipation of the changes in find-patterns we want to have a more general
+format to describe patterns)
+* [ ] Re-implement find-patterns to parse source files and search for react components in the AST (to find patterns more reliably)
+* [ ] Parse JS files to find relative dependencies to other patterns and add this information to patterns
+* [ ] Add chokidar to watch all pattern folders and update patterns when files are added/removed
 * [ ] Parse CSS files to find relative dependencies to other patterns
-* [ ] Investigate analyzing JS files to find default exports that return JSX
-    (to find patterns more reliably)
-* [ ] Investigate analyzing JSX `className` attributes to find CSS dependencies
-    (if no CSS modules are being used)
+* [ ] Investigate analyzing JSX `className` attributes to find CSS dependencies (if no CSS modules are being used)
+
+# Inspiration / similar projects
+* [React Toolbox](http://react-toolbox.com/#/components/button)
+* [React Style Guide](http://react-styleguidist.js.org/#Button)
+* [React Atelier](http://scup.github.io/atellier/material-ui-atellier/)
+* [React Storybook](https://github.com/kadirahq/react-storybook)
+* [Patternplate](https://github.com/sinnerschrader/patternplate)
+* [Pattern Lab](http://demo.patternlab.io/)
