@@ -2,9 +2,15 @@
   "name": "schaufenster",
   "version": "0.1.0",
   "description": "easy styleguides for react projects",
-  "main": "distribution/index.js",
+  "main": "distribution/node/index.js",
+  "browser": "distribution/browser/index.js",
+  "jsnext:main": "distribution/es6/index.js",
   "scripts": {
-    "test": "ava"
+    "test": "BABEL_ENV=node ava",
+    "build": "npm run build:node & npm run build:browser & npm run build:jsnext",
+    "build:node": "BABEL_ENV=node babel -d distribution/node source",
+    "build:browser": "BABEL_ENV=browser babel -d distribution/browser source",
+    "build:jsnext": "BABEL_ENV=jsnext babel -d distribution/es6 source"
   },
   "ava": {
     "files": [
@@ -44,7 +50,9 @@
   "homepage": "https://github.com/nerdlabs/schaufenster#readme",
   "devDependencies": {
     "ava": "0.14.0",
+    "babel-cli": "6.8.0",
     "babel-polyfill": "6.8.0",
+    "babel-preset-es2015": "6.0.1",
     "babel-preset-es2015-node": "6.0.1",
     "babel-preset-stage-0": "6.5.0",
     "babel-register": "6.8.0",
