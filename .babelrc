@@ -18,5 +18,9 @@
         "stage-0"
       ]
     }
-  }
+  },
+  "presets": [
+    "es2015-node",
+    "stage-0"
+  ]
 }
