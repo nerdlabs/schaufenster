@@ -62,6 +62,8 @@
     "unindent": "2.0.0"
   },
   "dependencies": {
+    "babel-types": "6.8.1",
+    "babylon": "6.8.0",
     "denodeify": "1.2.1",
     "glob": "7.0.3",
     "invariant": "2.2.1",
