@@ -3,6 +3,7 @@ import isComponent from '../source/is-component';
 import classExtendsReactComponent from './fixtures/class-extends-react-component';
 import classExtendsComponent from './fixtures/class-extends-component';
 import classRenderJsx from './fixtures/class-render-jsx';
+import reactCreateClass from './fixtures/react-createclass';
 
 
 test('calling is-component with no arguments', t => {
@@ -32,5 +33,10 @@ test('calling is-component with a class that extends Component', t => {
 
 test('calling is-component with a class that has a render method and contains JSX', t => {
 	const actual = isComponent(classRenderJsx);
+	t.true(actual, 'it should return true');
+});
+
+test('calling is-component with a class that has been created by React.createClass', t => {
+	const actual = isComponent(reactCreateClass);
 	t.true(actual, 'it should return true');
 });

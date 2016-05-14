@@ -36,6 +36,13 @@ const containsJSX = (node = {}) => {
 		containsJSX(node[key]));
 };
 
+const isCreateClass = (node = {}) => {
+	return node.type === 'CallExpression' &&
+		node.callee.type === 'MemberExpression' &&
+		node.callee.object.name === 'React' &&
+		node.callee.property.name === 'createClass';
+};
+
 export default node => {
 	invariant(
 		node && typeof node === 'object',
@@ -48,5 +55,7 @@ export default node => {
 	const hasRenderMethod = renderMethod != null;
 	const renderContainsJSX = hasRenderMethod && containsJSX(renderMethod);
 
-	return isClass(node) && (extendsReact && hasRenderMethod || renderContainsJSX);
+	return isClass(node) ?
+		(extendsReact && hasRenderMethod) || renderContainsJSX :
+		isCreateClass(node);
 };
