@@ -43,6 +43,16 @@ const isCreateClass = (node = {}) => {
 		node.callee.property.name === 'createClass';
 };
 
+const isFunction = (node = {}) => {
+	return node.type === 'FunctionDeclaration' ||
+		node.type === 'FunctionExpression' ||
+		node.type === 'ArrowFunctionExpression';
+};
+
+const hasReturnStatement = ({body: {body = []}}) => {
+	return body.some(({type}) => type === 'ReturnStatement');
+};
+
 export default node => {
 	invariant(
 		node && typeof node === 'object',
@@ -52,10 +62,16 @@ export default node => {
 
 	const extendsReact = classExtends(['React', 'Component'], node);
 	const renderMethod = getMethod('render', getClassMethods(node));
-	const hasRenderMethod = renderMethod != null;
+	const hasRenderMethod = renderMethod != null; // check against null|undefined
 	const renderContainsJSX = hasRenderMethod && containsJSX(renderMethod);
 
-	return isClass(node) ?
-		(extendsReact && hasRenderMethod) || renderContainsJSX :
+	const isReactClass = isClass(node) &&
+		((extendsReact && hasRenderMethod) || renderContainsJSX) ||
 		isCreateClass(node);
+
+	const isStatelessFunctionalComponent = isFunction(node) &&
+		hasReturnStatement(node) &&
+		containsJSX(node);
+
+	return isReactClass || isStatelessFunctionalComponent;
 };
