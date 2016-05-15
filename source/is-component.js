@@ -1,7 +1,8 @@
 import invariant from 'invariant';
 import {VISITOR_KEYS} from 'babel-types';
 
-const isClass = (node = {}) => node.type === 'ClassDeclaration';
+const isClass = (node = {}) => node.type === 'ClassDeclaration' ||
+	node.type === 'ClassExpression';
 
 const getClassMethods = (node = {}) => isClass(node) ? node.body.body : null;
 
