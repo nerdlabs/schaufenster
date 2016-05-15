@@ -32,9 +32,12 @@ const isJSX = (node = {}) => {
 
 const containsJSX = (node = {}) => {
 	const keys = VISITOR_KEYS[node.type] || [];
-	return isJSX(node) || keys.some(key => Array.isArray(node[key]) ?
-		node[key].some(containsJSX) :
-		containsJSX(node[key]));
+	return isJSX(node) ||
+		keys.some(key => {
+			return Array.isArray(node[key]) ?
+				node[key].some(containsJSX) :
+				node[key] && containsJSX(node[key]);
+		});
 };
 
 const isCreateClass = (node = {}) => {
