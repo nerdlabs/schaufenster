@@ -1,81 +1,97 @@
 import invariant from 'invariant';
 import {VISITOR_KEYS} from 'babel-types';
 
-const isClass = (node = {}) => node.type === 'ClassDeclaration' ||
-	node.type === 'ClassExpression';
-
-const getClassMethods = (node = {}) => isClass(node) ? node.body.body : null;
-
-const getObjectName = ({type = 'Identifier', name, object}) => {
-	return type === 'Identifier' ? name : getObjectName(object);
-};
-
-const classExtends = (supers = [], {superClass}) => {
-	const hasSuperClass = superClass != null; // check against null|undefined
-	return hasSuperClass ? supers.includes(getObjectName(superClass)) : false;
-};
-
-const getMethod = (method, methods = []) => {
-	return Array.isArray(methods) ?
-		methods.find(({key}) => key.name === method) :
-		null;
-};
-
-const isJSX = (node = {}) => {
-	const isJSXElement = node.type === 'JSXElement';
-	const isCreateElement = node.type === 'CallExpression' &&
-		node.callee.type === 'MemberExpression' &&
-		node.callee.object.name === 'React' &&
-		node.callee.property.name === 'createElement';
-	return isJSXElement || isCreateElement;
-};
-
-const containsJSX = (node = {}) => {
-	const keys = VISITOR_KEYS[node.type] || [];
-	return isJSX(node) ||
-		keys.some(key => {
-			return Array.isArray(node[key]) ?
-				node[key].some(containsJSX) :
-				node[key] && containsJSX(node[key]);
-		});
-};
-
-const isCreateClass = (node = {}) => {
-	return node.type === 'CallExpression' &&
-		node.callee.type === 'MemberExpression' &&
-		node.callee.object.name === 'React' &&
-		node.callee.property.name === 'createClass';
-};
-
 const isFunction = (node = {}) => {
 	return node.type === 'FunctionDeclaration' ||
 		node.type === 'FunctionExpression' ||
 		node.type === 'ArrowFunctionExpression';
 };
 
-const hasReturnStatement = ({body: {body = []}}) => {
-	return body.some(({type}) => type === 'ReturnStatement');
+const isClass = (node = {}) => {
+	return node.type === 'ClassDeclaration' || node.type === 'ClassExpression';
 };
 
-export default node => {
+const getBody = ({body = {body: []}}) => body.body;
+
+const hasReturnStatement = (node = {}) => {
+	// TODO: improve this by not only checking the direct body of the function
+	// but recursively check all block / control flow statements
+	return getBody(node).some(({type}) => type === 'ReturnStatement');
+};
+
+const classExtends = (path = [], {superClass}) => {
+	return superClass ? isIdOrMember(path, superClass) : false;
+};
+
+const getClassMethod = (method, node = {}) => {
+	return isClass(node) && getBody(node).find(({key}) => key.name === method);
+};
+
+const isIdOrMember = (path, {type, name, property = {}, object = {}}) => {
+	const head = path[0];
+	const last = path[path.length -1];
+	const init = path.slice(0, -1);
+
+	return init.length === 0 ?
+		name === head :
+		property.name === last && isIdOrMember(init, object);
+};
+
+const isCallExpression = (path = [], node = {}) => {
+	return node.type === 'CallExpression' && isIdOrMember(path, node.callee);
+};
+
+const isJSX = (pragma, node = {}) => {
+	return node.type === 'JSXElement' || isCallExpression(pragma, node);
+};
+
+const containsJSX = (pragma, node = {}) => {
+	const containsJSXWithPragma = containsJSX.bind(null, pragma);
+	const keys = VISITOR_KEYS[node.type] || [];
+	return isJSX(pragma, node) ||
+		keys.some(key => {
+			return Array.isArray(node[key]) ?
+				node[key].some(containsJSXWithPragma) :
+				node[key] && containsJSXWithPragma(node[key]);
+		});
+};
+
+const extendsReact = node => {
+	// TODO: take an array of names which were destructured from react (if any)
+	// and check those instead of assuming that `Component` relates to react.
+	return classExtends(['React', 'Component'], node) ||
+		classExtends(['Component'], node);
+};
+
+const isCreateClass = node => {
+	// TODO: take an array of names which were destructured from react (if any)
+	// and check those instead of assuming that `createClass` relates to react.
+	return isCallExpression(['React', 'createClass'], node) ||
+		isCallExpression(['createClass'], node);
+};
+
+export default (node, pragma = ['React', 'createElement']) => {
 	invariant(
 		node && typeof node === 'object',
-		'Argument should be of type object. Instead got"%s"',
+		'Argument "node" should be of type object. Instead got"%s"',
 		typeof node
 	);
 
-	const extendsReact = classExtends(['React', 'Component'], node);
-	const renderMethod = getMethod('render', getClassMethods(node));
-	const hasRenderMethod = renderMethod != null; // check against null|undefined
-	const renderContainsJSX = hasRenderMethod && containsJSX(renderMethod);
+	invariant(
+		Array.isArray(pragma),
+		'Argument "pragma" must be of type Array. Instead got "%s"',
+		typeof pragma
+	);
 
-	const isReactClass = isClass(node) &&
-		((extendsReact && hasRenderMethod) || renderContainsJSX) ||
-		isCreateClass(node);
+	const renderMethod = isClass(node) && getClassMethod('render', node);
 
-	const isStatelessFunctionalComponent = isFunction(node) &&
-		hasReturnStatement(node) &&
-		containsJSX(node);
+	const isReactClass = isCreateClass(node) ||
+		isClass(node) && extendsReact(node) && renderMethod !== undefined;
 
-	return isReactClass || isStatelessFunctionalComponent;
+	const isStatelessFunction = isFunction(node) &&
+		hasReturnStatement(node) && containsJSX(pragma, node);
+
+	const isStatelessClass = isClass(node) && containsJSX(pragma, renderMethod);
+
+	return isReactClass || isStatelessFunction || isStatelessClass;
 };
