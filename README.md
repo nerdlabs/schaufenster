@@ -71,3 +71,89 @@ format to describe patterns)
 * [React Storybook](https://github.com/kadirahq/react-storybook)
 * [Patternplate](https://github.com/sinnerschrader/patternplate)
 * [Pattern Lab](http://demo.patternlab.io/)
+
+
+
+
+* collect-files => globs for **/*.js files
+  * read-fle => read a file and parse it to an AST
+    * collect-dependencies => find all import statements
+    * extract-components => find all exports and run the following scripts:
+      * is-component => checks whether an ast node is a react component
+      * parse-comments => to find docblock comments (@schaufenster use|ignore, @example, @description)
+      * find-displayname => function/class/variable/export name, file name or last part of path
+      * find-proptypes => uses react-docgen to extract information about propTypes
+    * find-usages => cross-reference all components and their dependencies to find usages
+
+
+Some examples for how the docblock integration could work:
+https://astexplorer.net/#/WmLmTJTRGq
+
+What do we do with a README.md file? Should we display it?
+Could it contain example code? How to find out if it belongs to a single component
+or to all components in its folder.
+
+
+**data format (file-based)**
+```json
+{
+  "path": "./components/atoms/button",
+  "fileName": "index.js",
+  "fullPath": "./components/atoms/button/index.js",
+  "content": "import * as React from 'react';\nexport default () => (<button></button>);",
+  "ast": {...},
+  "fileImports": [{
+    "source": "react",
+    "names": [{ "*": "React" }]
+  }],
+  "components": [{
+    "displayName": "Button",
+    "export": {
+      "name": "default",
+      "type": "default"
+    },
+    "examples": [
+      "<Button />"
+    ],
+    "propTypes": {}
+  }]
+}
+```
+
+**or possibly component based**
+```json
+{
+  "displayName": "Button",
+  "fileName": "index.js",
+  "fullPath": "./components/atoms/button/index.js",
+  "content": "import * as React from 'react';\nexport default () => (<button></button>);",
+  "ast": {...},
+  "fileImports": [{
+    "source": "react",
+    "names": [{ "*": "React" }]
+  }, {
+    "source": "../label/index.js",
+    "names": [{ "Label": "Label" }]
+  }, {
+    "source": "../../../redux/myaction.js",
+    "names": [{ "doMyAction": "doMyAction" }]
+  }, {
+    "source": "./styles.css",
+    "names": [{ "styles": "styles" }]
+  }],
+  "export": {
+    "name": "default",
+    "type": "default"
+  },
+  "dependencies": [
+    $ref({...}),
+  ],
+  "dependents": [
+    $ref({...}),
+  ],
+  "propTypes": {},
+  "examples": [
+    "<Button />"
+  ],
+}
+```
