@@ -37,15 +37,12 @@ test('when no files are found with given glob', async t => {
 test('when calling with a matching glob', async t => {
 	const actual = await collectFiles({include: './nested/components/**/*.js'});
 	const expected = [{
-		path: './nested/components',
 		filename: 'button.js',
 		fullPath: './nested/components/button.js'
 	}, {
-		path: './nested/components',
 		filename: 'image.js',
 		fullPath: './nested/components/image.js'
 	}, {
-		path: './nested/components/inputs',
 		filename: 'index.js',
 		fullPath: './nested/components/inputs/index.js'
 	}];
@@ -62,11 +59,9 @@ test('when calling with a matching glob + exclude glo', async t => {
 		exclude: './nested/components/inputs/**/*.js'
 	});
 	const expected = [{
-		path: './nested/components',
 		filename: 'button.js',
 		fullPath: './nested/components/button.js'
 	}, {
-		path: './nested/components',
 		filename: 'image.js',
 		fullPath: './nested/components/image.js'
 	}];
