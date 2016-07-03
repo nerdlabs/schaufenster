@@ -1,3 +1,5 @@
+process.env.BABEL_ENV = 'node';
+
 module.exports = function (wallaby) {
   return {
     files: [
@@ -9,17 +11,14 @@ module.exports = function (wallaby) {
     ],
 
     env: {
-      type: 'node'
-    },
-
-    compilers: {
-      '**/*.js': wallaby.compilers.babel()
+      type: 'node',
+      runner: 'node'
     },
 
     testFramework: 'ava',
 
-    setup: function () {
-      require('babel-polyfill');
+    compilers: {
+      '**/*.js': wallaby.compilers.babel()
     },
 
     debug: true
