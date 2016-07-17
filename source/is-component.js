@@ -14,9 +14,12 @@ const isClass = (node = {}) => {
 const getBody = ({body = {body: []}}) => body.body;
 
 const hasReturnStatement = (node = {}) => {
+	const isArrowFunction = node.type === 'ArrowFunctionExpression';
+	const hasBody = node.body.type === 'BlockExpression';
 	// TODO: improve this by not only checking the direct body of the function
 	// but recursively check all block / control flow statements
-	return getBody(node).some(({type}) => type === 'ReturnStatement');
+	return (isArrowFunction && !hasBody) ||
+		getBody(node).some(({type}) => type === 'ReturnStatement');
 };
 
 const classExtends = (path = [], {superClass}) => {
