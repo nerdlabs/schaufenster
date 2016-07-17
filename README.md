@@ -52,7 +52,7 @@ Umsetzung
 * [x] Build basic UI to display navigation, name, path and readme
 * [X] Generate "entry-file" which exports/exposes all patterns
 * [x] Extend the UI to be able to render pattern demos *spiked in nerdlabs/schaufenster-ui#poc-rendering*
-* [ ] Code massage / clean up rename variables, make tests more robust, etc 
+* [ ] Code massage / clean up rename variables, make tests more robust, etc
 * [ ] Improve create-entryfile.js (allow for es6 module syntax, commonjs, globals, etc)
 * [ ] Use react-markdown to extract JSX code blocks from readme file (used to render demo of pattern)
 * [ ] Use react-docgen to create propTypes documentation
@@ -93,32 +93,6 @@ What do we do with a README.md file? Should we display it?
 Could it contain example code? How to find out if it belongs to a single component
 or to all components in its folder.
 
-
-**data format (file-based)**
-```json
-{
-  "path": "./components/atoms/button",
-  "fileName": "index.js",
-  "fullPath": "./components/atoms/button/index.js",
-  "content": "import * as React from 'react';\nexport default () => (<button></button>);",
-  "ast": {...},
-  "fileImports": [{
-    "source": "react",
-    "names": [{ "*": "React" }]
-  }],
-  "components": [{
-    "displayName": "Button",
-    "export": {
-      "name": "default",
-      "type": "default"
-    },
-    "examples": [
-      "<Button />"
-    ],
-    "propTypes": {}
-  }]
-}
-```
 
 **or possibly component based**
 ```json
