@@ -63,6 +63,7 @@
     "unindent": "2.0.0"
   },
   "dependencies": {
+    "babel-generator": "6.11.3",
     "babel-traverse": "6.10.4",
     "babel-types": "6.11.1",
     "babylon": "6.8.2",
