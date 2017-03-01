@@ -36,19 +36,13 @@ test('when no files are found with given glob', async t => {
 
 test('when calling with a matching glob', async t => {
 	const actual = await collectFiles({include: './nested/components/**/*.js'});
-	const expected = [{
-		filename: 'button.js',
-		fullPath: './nested/components/button.js'
-	}, {
-		filename: 'image.js',
-		fullPath: './nested/components/image.js'
-	}, {
-		filename: 'index.js',
-		fullPath: './nested/components/inputs/index.js'
-	}];
+	const expected = [
+		'./nested/components/button.js',
+		'./nested/components/image.js',
+		'./nested/components/inputs/index.js',
+	];
 	const it = `
-		it should return an object for each pattern consisting of "path",
-		"filename" and "fullPath"
+		it should return the absolute path for each file.
 	`;
 	t.deepEqual(actual, expected, it);
 });
@@ -58,16 +52,12 @@ test('when calling with a matching glob + exclude glo', async t => {
 		include: './nested/components/**/*.js',
 		exclude: './nested/components/inputs/**/*.js'
 	});
-	const expected = [{
-		filename: 'button.js',
-		fullPath: './nested/components/button.js'
-	}, {
-		filename: 'image.js',
-		fullPath: './nested/components/image.js'
-	}];
+	const expected = [
+		'./nested/components/button.js',
+		'./nested/components/image.js',
+	];
 	const it = `
-		it should return an object for each pattern consisting of "path",
-		"filename" and "fullPath"
+		it should return the absolute path for each file
 	`;
 	t.deepEqual(actual, expected, it);
 });

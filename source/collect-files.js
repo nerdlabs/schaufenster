@@ -18,7 +18,6 @@ export default async ({include, exclude = ''} = {}) => {
 	const files = await tryGlob(include, {ignore: exclude});
 
 	return files.map(fullPath => {
-		const filename = basename(fullPath);
-		return {filename, fullPath};
+		return fullPath;
 	});
 }

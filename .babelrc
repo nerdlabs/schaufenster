@@ -5,7 +5,10 @@
         "es2015-node",
         "stage-0"
       ],
-      "plugins": ["transform-async-to-generator"]
+      "plugins": [
+        "transform-async-to-generator",
+        "transform-es2015-destructuring"
+      ]
     },
     "browser": {
       "plugins": ["transform-runtime"],

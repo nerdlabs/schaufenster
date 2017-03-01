@@ -12,10 +12,10 @@ export default function generateEntryFile(components = []) {
     const imports = components.map((component, i) => {
         return t.importDeclaration(
             [t.importSpecifier(
-                t.identifier(`${component.export.name}_${i}`),
-                t.identifier(component.export.name)
+                t.identifier(`${component.exports.name}_${i}`),
+                t.identifier(component.exports.name)
             )],
-            t.stringLiteral(component.fullPath)
+            t.stringLiteral(component.absolutePath)
         );
     });
 

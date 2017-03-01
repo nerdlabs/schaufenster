@@ -1,49 +1,53 @@
-import { writeFile } from 'fs';
-import { resolve as resolvePath, dirname } from 'path';
-import { flatten } from 'lodash';
+import 'babel-polyfill';
+import { resolver, handlers as allHandlers, parse } from 'react-docgen';
+import importsHandler from 'react-docgen-imports-handler';
+import exportsHandler from 'react-docgen-exports-handler';
+import { createDisplayNameHandler } from 'react-docgen-displayname-handler';
 import collectFiles from './collect-files';
-import readFile from './read-file';
-import collectDependencies from './collect-dependencies';
-import extractComponents from './extract-components';
+import { tryReadFile } from './lib/fs';
+import generateExample from './generate-examples';
 import generateEntryFile from './generate-entryfile';
 
-async function main(config = {}) {
-    const files = await collectFiles({
-        include: config.include,
-        exclude: config.exclude
-    });
-    const components = flatten(await Promise.all(files.map(async (file) => {
-        const { content, ast } = await readFile(file.fullPath);
-        const fileImports = collectDependencies(ast);
-        const components = extractComponents(ast);
+const findComponents = resolver.findAllExportedComponentDefinitions;
+const handlers = [
+	allHandlers.componentDocblockHandler,
+	allHandlers.defaultPropsHandler,
+	allHandlers.propTypeHandler,
+	allHandlers.propTypeCompositionHandler,
+	allHandlers.propDocBlockHandler,
+	allHandlers.flowTypeHandler,
+	allHandlers.flowTypeDocBlockHandler,
+	importsHandler,
+	exportsHandler,
+];
 
-        const dependencies = fileImports
-            .filter(({ source }) => source.startsWith('.'))
-            .map(({ source }) => resolvePath(dirname(file.fullPath), source))
-            .map((path) => require.resolve(path));
+async function main() {
+	const files = await collectFiles({
+		include: '/home/zaubernerd/workspace/costadigital/seetours-next/src/components/**/*.js',
+		exclude: '/home/zaubernerd/workspace/costadigital/seetours-next/src/components/**/*.spec.js'
+	});
+	const contents = await Promise.all(files.map(async (file) => {
+		return {
+			absolutePath: file,
+			content: await tryReadFile(file, 'utf-8'),
+		};
+	}));
 
-        return components.map((component) => {
-            return {
-                ...component,
-                ...file,
-                content,
-                fileImports,
-                dependencies
-            };
-        });
-    })));
-
-    writeFile('./entry.js', generateEntryFile(components), (error) => {
-        console.error(error);
-    });
-
-    console.log(JSON.stringify(components, null, 2));
+	const components = contents.reduce((components, { absolutePath, content }) => {
+		const displayNameHandler = createDisplayNameHandler(absolutePath);
+		return [
+			...components,
+			...parse(content, findComponents, handlers.concat(displayNameHandler))
+				.map(documentation => ({ ...documentation, absolutePath })),
+		];
+	}, []);
+	// console.log(require('util').inspect(components, { colors: true }));
+	// console.log(generateExample(components[0], components[0].props));
+	console.log(generateEntryFile(components));
 }
 
-main({
-    include: '../costadigital/seetours-next/src/components/**/*.js'
+main().catch(error => {
+	setTimeout(function () {
+		throw error;
+	}, 0);
 });
-
-
-process.on('unhandledRejection', console.error.bind(console));
-process.on('uncaughtException', console.error.bind(console));

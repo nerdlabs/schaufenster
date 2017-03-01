@@ -1,50 +1,6 @@
 # schaufenster
 stay tuned
 
-
-
-
-Ziele
-* Komponenten in Isolation anzeigen
-* Ordnerstrutkur wird für hierarchische Navigation / IDs verwendet
-* Komponenten sind self-contained
-* Komponenten können mit jedem Build-Tool verwendet werden
-* Informationen zum Pattern:
-  * Rendering der Komponte mit Styling, Assets, Behaviour
-  * Name                                                    (1)
-  * Pfad (zur main file)                                    (1)
-  * Props (falls vorhanden, react-docgen)                   (1)
-  * Readme (gerendertes md)                                 (1)
-  * Dependency Tree (depending, dependents)                 (1)
-* Nice to have: Linter für Abhängigkeiten                   (1)
-
-Umsetzung
-* patterns sind: ordner mit package.json
-* entry file folgt den node konventionen
-* import ist unverändert im vgl. zu node
-* Readme: wenn im pattern folder readme.md, anzeigen/rendern
-
-# Architektur
-----------  
-| 1 core | ---- fs comprehension, js parsing, markdown parsing (jsx demo)  
-----------  
-     |  
----------------  
-| ui-renderer |  ---- rendering navigation, documentation, dependency tree, demos  
----------------  ---- erzeugt browser-kompatiblen output  
-	- benutzt zentrale build-bundles vom fs (muss konfiguriert werden)  
-	- schreibt zentrale entry-file auf fs (hängt exports in global)  
-	- user provided html-grundgerüst  
-	- user konfiguriert publicRoot (fs-path)  
-	- user konfiguriert bundlePaths, werden eingebunden  
-	- patterns werden über eindeutige id referenziert  
-
-
-# Application life cycle
-- configuration lesen
-- patterns finden
-- patterns parsen
-
 #Roadmap / ToDos
 * [x] Use substack/node-resolve in `read-patterns` to find entry-files
 * ~~[x] Build up initial [pattern tree](tree.md)~~ abandoned in favor of a flat array of components
@@ -98,25 +54,18 @@ or to all components in its folder.
 ```json
 {
   "displayName": "Button",
-  "fileName": "index.js",
   "fullPath": "./components/atoms/button/index.js",
   "content": "import * as React from 'react';\nexport default () => (<button></button>);",
-  "ast": {...},
-  "fileImports": [{
-    "source": "react",
-    "names": [{ "*": "React" }]
-  }, {
-    "source": "../label/index.js",
-    "names": [{ "Label": "Label" }]
-  }, {
-    "source": "../../../redux/myaction.js",
-    "names": [{ "doMyAction": "doMyAction" }]
-  }, {
-    "source": "./styles.css",
-    "names": [{ "styles": "styles" }]
-  }],
-  "export": {
-    "name": "default",
+  "summary": "A short summary of the purpose of this component.",
+  "description": "A lengthy description explaining usage and other stuff...",
+  "imports": [
+    "react",
+    "../label/index.js",
+    "../../../redux/myaction.js",
+    "./styles.css",
+  ],
+  "exports": {
+    "format": "ES2015",
     "type": "default"
   },
   "dependencies": [
@@ -125,9 +74,43 @@ or to all components in its folder.
   "dependents": [
     $ref({...}),
   ],
-  "propTypes": {},
-  "examples": [
-    "<Button />"
-  ],
+  "props": {},
+  "examples": [{
+    "caption": "A big red button",
+    "code": "<Button size=\"big\" color=\"red\" />",
+  }],
 }
 ```
+
+ideas for custom react-docgen handlers:
+- resolve imported PropTypes / resolve spreaded child component PropTypes
+- find component usages
+  - search for components that are used inside other components
+  - search for components that are used inside unit tests
+- generate examples
+  - generate dummy data from PropType documentation
+    - show variations of enums
+    - show variations of unions
+    - show variations of booleans
+  - generate examples from component docblock
+    - each example is it's own variation
+    - examples can have captions (i.e. @example big button\n<Button size="big" />)
+  - generate examples from PropType docblock
+    - show variations if multiple examples are specified
+  - generate examples from fenced code blocks in readme
+    - each code block is it's own variation
+  - generate examples from component usage inside other components
+    - collect all usages and filter for unique variations
+  - generate examples from component usage inside unit tests
+    - use unit test title as variation caption
+  - generate examples via carte-blanche?
+- find component dependencies inside jsx
+
+todos:
+  - react-docgen-imports-handler should also find imported & local name
+  - Investigate if react-docgen can handle jsxmemberexpression
+  - Investigate jsxnamespacedname
+  - Investigate jsxspreadattribute
+  - cleanup & tests for "generate-examples.js" -> create custom docgen handler
+  - add symbol proptype to react-docgen propTypeHandler
+  - fix issues with babel presets (object destructuring rest/spread should be stage-x not es2015)
